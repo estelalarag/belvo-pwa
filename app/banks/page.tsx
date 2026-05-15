@@ -5,19 +5,19 @@ import { useEffect } from "react";
 
 const mockAccounts = [
   {
-    id: 1,
+    id: "acc_1",
     name: "Checking Account",
     category: "Checking",
     balance: 24500,
   },
   {
-    id: 2,
+    id: "acc_2",
     name: "Savings Account",
     category: "Savings",
     balance: 98000,
   },
   {
-    id: 3,
+    id: "acc_3",
     name: "Payroll Account",
     category: "Payroll",
     balance: 15750,
@@ -40,9 +40,9 @@ export default function BankDetailPage() {
 
   }, [router]);
 
-  function handleSelectAccount(accountId: number) {
+  function handleSelectAccount(accountId: string) {
 
-    // ✅ NUEVO ROUTING
+    // 
     router.push(`/dashboard/${accountId}`);
   }
 
