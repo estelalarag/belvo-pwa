@@ -1,87 +1,144 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-export default function BanksPage() {
-  const [banks, setBanks] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+const mockAccounts = [
+  {
+    id: 1,
+    name: "Checking Account",
+    category: "Checking",
+    balance: 24500,
+  },
+  {
+    id: 2,
+    name: "Savings Account",
+    category: "Savings",
+    balance: 98000,
+  },
+  {
+    id: 3,
+    name: "Payroll Account",
+    category: "Payroll",
+    balance: 15750,
+  },
+];
+
+export default function BankDetailPage() {
 
   const router = useRouter();
 
+  // 🔒 ROUTE PROTECTION
   useEffect(() => {
-    async function fetchBanks() {
-      try {
-        const response = await fetch("/api/banks");
-        const data = await response.json();
 
-        console.log(data);
+    const session =
+      localStorage.getItem("session");
 
-        setBanks(data.results || []);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
+    if (!session) {
+      router.push("/login");
     }
 
-    fetchBanks();
-  }, []);
+  }, [router]);
 
-function handleSelectBank(institution: string) {
-  router.push(`/banks/${institution}`);
-}
+  function handleSelectAccount(accountId: number) {
+
+    // ✅ NUEVO ROUTING
+    router.push(`/dashboard/${accountId}`);
+  }
 
   return (
     <main className="min-h-screen bg-slate-950 p-6">
+
       <div className="max-w-md mx-auto">
 
-        <h1 className="text-3xl font-bold text-white mb-2">
-          Select your bank
-        </h1>
+        {/* HEADER */}
+        <div className="flex items-center justify-between mb-8">
 
-        <p className="text-slate-400 mb-8">
-          Connect an institution
-        </p>
+          <div>
+            <h1 className="text-3xl font-bold text-white">
+              Your Accounts
+            </h1>
 
-        {loading && (
-          <p className="text-slate-400">
-            Loading banks...
-          </p>
-        )}
+            <p className="text-slate-400">
+              Select an account
+            </p>
+          </div>
+
+          <button
+            onClick={() => {
+              localStorage.removeItem("session");
+              router.push("/login");
+            }}
+            className="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-xl"
+          >
+            Logout
+          </button>
+
+        </div>
 
         <div className="space-y-4">
 
-          {banks.map((bank) => (
+          {mockAccounts.map((account) => (
+
             <div
-              key={bank.id}
-              className="bg-slate-900 border border-slate-800 rounded-2xl p-4"
+              key={account.id}
+              className="
+                bg-slate-900
+                border
+                border-slate-800
+                hover:border-cyan-500
+                transition-all
+                rounded-2xl
+                p-5
+              "
             >
+
               <div className="flex justify-between items-center">
 
                 <div>
+
                   <p className="text-white font-semibold">
-                    {bank.display_name}
+                    {account.name}
                   </p>
 
                   <p className="text-slate-400 text-sm">
-                    {bank.country_code} • {bank.type}
+                    {account.category}
                   </p>
+
                 </div>
 
                 <button
-                  onClick={() => handleSelectBank(bank.name)}
-                  className="bg-cyan-600 hover:bg-cyan-500 text-white px-4 py-2 rounded-xl"
+                  onClick={() =>
+                    handleSelectAccount(account.id)
+                  }
+                  className="
+                    bg-gradient-to-r
+                    from-cyan-500
+                    to-blue-600
+                    hover:opacity-90
+                    text-white
+                    px-4
+                    py-2
+                    rounded-xl
+                  "
                 >
-                  Select
+                  Open
                 </button>
 
               </div>
+
+              <p className="text-cyan-400 text-2xl font-bold mt-6">
+                ${account.balance.toLocaleString()}
+              </p>
+
             </div>
+
           ))}
 
         </div>
+
       </div>
+
     </main>
   );
 }
