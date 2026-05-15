@@ -63,15 +63,17 @@ export default function LoginPage() {
     <main className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
 
       <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-8">
-        
-        </div>
-        <Image
-        src="/icon-192.png"
-        alt="Logo"
-        width={90}
-        height={90}
-        className="rounded-2xl"
-        />
+          <div className="flex justify-center mb-6">
+
+            <Image
+              src="/icon-192.png"
+              alt="Logo"
+              width={90}
+              height={90}
+      className="rounded-2xl"
+            />
+
+          </div>
 
         <h1 className="text-3xl font-bold text-white mb-2">
           Welcome Back
